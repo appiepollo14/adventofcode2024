@@ -33,7 +33,7 @@ public class Day1 {
         lists.put("left", new ArrayList<>());
         lists.put("right", new ArrayList<>());
         try {
-            Scanner scanner = new Scanner(new File("src/main/resources/day1/test-part-1.txt"));
+            Scanner scanner = new Scanner(new File("src/main/resources/day1/puzzle-input.txt"));
 
             while (scanner.hasNextLine()) {
                 String currentLine = scanner.nextLine();
