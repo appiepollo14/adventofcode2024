@@ -13,6 +13,7 @@ import java.util.*;
 public class Day2 {
 
     List<List<Integer>> input = new ArrayList<>(new ArrayList<>());
+    List<List<Integer>> unsafeLists = new ArrayList<>(new ArrayList<>());
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
@@ -25,8 +26,8 @@ public class Day2 {
     @Path("/part2")
     @Produces(MediaType.TEXT_PLAIN)
     public int day2part2() {
-        input = new ArrayList<>(new ArrayList<>());
-        load();
+//        input = new ArrayList<>(new ArrayList<>());
+//        load();
         return calculatePart2();
     }
 
@@ -49,30 +50,36 @@ public class Day2 {
     public int calculatePart1() {
         int safeListsQty = 0;
         for (List<Integer> l : input) {
-            if (Objects.equals(l.get(0), l.get(1))) {
-                continue;
-            }
-            boolean safe = true;
-            if (l.get(1) < l.get(0)) {
-                l = l.reversed();
-            }
-
-            for (int i = 1; i < l.size(); i++) {
-
-                System.out.println(l.get(i));
-                var safeStep = (l.get(i) - l.get(i - 1) >= 1 && l.get(i) - l.get(i - 1) <= 3);
-                if (!safeStep) {
-                    safe = false;
-                    break;
-                }
-            }
-            if (safe) {
+            if (isSafeList(l)) {
                 safeListsQty += 1;
             }
-            System.out.println("List: " + l + " is: " + safe);
-
         }
         return safeListsQty;
+    }
+
+    private boolean isSafeList(List<Integer> l) {
+        if (Objects.equals(l.get(0), l.get(1))) {
+            return false;
+        }
+        boolean safe = true;
+        if (l.get(1) < l.get(0)) {
+            l = l.reversed();
+        }
+
+        for (int i = 1; i < l.size(); i++) {
+
+            System.out.println(l.get(i));
+            var safeStep = (l.get(i) - l.get(i - 1) >= 1 && l.get(i) - l.get(i - 1) <= 3);
+            if (!safeStep) {
+                safe = false;
+                break;
+            }
+        }
+        if (safe) {
+            return true;
+        }
+        unsafeLists.add(l);
+        return false;
     }
 
     // Between 439 and 465
@@ -80,48 +87,31 @@ public class Day2 {
     // 445 not correct
     // 203 not correct
     public int calculatePart2() {
-        int safeListsQty = 0;
-        for (List<Integer> l : input) {
-            if (isSafe(l)) {
-                safeListsQty += 1;
+        int extraSafeCount = 0;
+
+        // Create a copy to avoid ConcurrentModificationException
+        List<List<Integer>> copyOfUnsafeLists = new ArrayList<>(unsafeLists);
+
+        for (List<Integer> originalList : copyOfUnsafeLists) {
+            boolean isSafe = false;
+
+            for (int index = 0; index < originalList.size(); index++) {
+                List<Integer> copiedList = new ArrayList<>(originalList);
+                System.out.println(copiedList);
+                copiedList.remove(index);
+                System.out.println(copiedList);
+
+                if (isSafeList(copiedList)) {
+                    isSafe = true;
+                    break;
+                }
             }
-        }
-        return safeListsQty;
-    }
 
-
-    private boolean isSafe(List<Integer> list) {
-        if (list.size() < 2) return true; // Single-element or empty lists are always safe
-
-        boolean increasing = list.get(1) > list.get(0); // Determine the direction
-        boolean skipped = false; // Flag to indicate if we've skipped an element
-
-        for (int i = 1; i < list.size(); i++) {
-            int diff = list.get(i) - list.get(i - 1);
-
-            if (!isValidStep(diff, increasing)) {
-                if (skipped) {
-                    return false; // If we've already skipped once, list is not safe
-                }
-                skipped = true;
-
-                // Try skipping the current or the previous element
-                if (i + 1 < list.size() && isValidStep(list.get(i + 1) - list.get(i - 1), increasing)) {
-                    i++; // Skip the current element
-                } else if (i > 1 && isValidStep(list.get(i) - list.get(i - 2), increasing)) {
-                    // Skip the previous element
-                    continue;
-                } else {
-                    return false; // Cannot make the list safe
-                }
+            if (isSafe) {
+                extraSafeCount++;
             }
         }
 
-        return true; // List is safe if we reach here
-    }
-
-    private boolean isValidStep(int diff, boolean increasing) {
-        if (diff < 1 || diff > 3) return false; // Difference must be between 1 and 3
-        return increasing ? diff > 0 : diff < 0; // Check if it respects the direction
+        return extraSafeCount;
     }
 }
