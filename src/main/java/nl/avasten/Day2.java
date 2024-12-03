@@ -78,38 +78,50 @@ public class Day2 {
     // Between 439 and 465
     // 457 not correct
     // 445 not correct
+    // 203 not correct
     public int calculatePart2() {
         int safeListsQty = 0;
         for (List<Integer> l : input) {
-            boolean safe = true;
-            boolean skippedOne = false;
-            if (l.get(1) < l.get(0)) {
-                l = l.reversed();
-            }
-
-            for (int i = 1; i < l.size(); i++) {
-                var safeStep = (l.get(i) - l.get(i - 1) >= 1 && l.get(i) - l.get(i - 1) <= 3);
-                if (!safeStep) {
-                    if (!skippedOne) {
-                        skippedOne = true;
-                        if (i + 1 < l.size()) {
-                            safe = (l.get(i + 1) - l.get(i - 1) >= 1 && l.get(i + 1) - l.get(i - 1) <= 3);
-                            i += i;
-                            System.out.println("Skipped one");
-                        }
-                        continue;
-                    }
-                    safe = false;
-                    break;
-                }
-            }
-            if (safe) {
+            if (isSafe(l)) {
                 safeListsQty += 1;
             }
-            System.out.println("List: " + l + " is: " + safe);
-
         }
         return safeListsQty;
     }
 
+
+    private boolean isSafe(List<Integer> list) {
+        if (list.size() < 2) return true; // Single-element or empty lists are always safe
+
+        boolean increasing = list.get(1) > list.get(0); // Determine the direction
+        boolean skipped = false; // Flag to indicate if we've skipped an element
+
+        for (int i = 1; i < list.size(); i++) {
+            int diff = list.get(i) - list.get(i - 1);
+
+            if (!isValidStep(diff, increasing)) {
+                if (skipped) {
+                    return false; // If we've already skipped once, list is not safe
+                }
+                skipped = true;
+
+                // Try skipping the current or the previous element
+                if (i + 1 < list.size() && isValidStep(list.get(i + 1) - list.get(i - 1), increasing)) {
+                    i++; // Skip the current element
+                } else if (i > 1 && isValidStep(list.get(i) - list.get(i - 2), increasing)) {
+                    // Skip the previous element
+                    continue;
+                } else {
+                    return false; // Cannot make the list safe
+                }
+            }
+        }
+
+        return true; // List is safe if we reach here
+    }
+
+    private boolean isValidStep(int diff, boolean increasing) {
+        if (diff < 1 || diff > 3) return false; // Difference must be between 1 and 3
+        return increasing ? diff > 0 : diff < 0; // Check if it respects the direction
+    }
 }
