@@ -68,6 +68,7 @@ public class Day3 {
     }
 
     // 114486385 too high
+    // 113965544
     // 54982966 too low
     void filterMultiplicationsPart2() {
         String mulReg = "mul\\(\\d{1,3},\\d{1,3}\\)";
