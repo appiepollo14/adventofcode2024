@@ -35,7 +35,9 @@ public class Day3 {
     public int day3part2() {
         input = new ArrayList<>();
         load();
-        return 0;
+        multiplications = new ArrayList<>();
+        filterMultiplicationsPart2();
+        return calculatePart1();
 //        return calculatePart2();
     }
 
@@ -63,7 +65,73 @@ public class Day3 {
                 multiplications.add(matcher.group());
             }
         }
-//        System.out.println(multiplications);
+    }
+
+    // 114486385 too high
+    // 54982966 too low
+    void filterMultiplicationsPart2() {
+        String mulReg = "mul\\(\\d{1,3},\\d{1,3}\\)";
+        String doReg = "do\\(\\)";
+        String dontReg = "don't\\(\\)";
+
+        Pattern mulPat = Pattern.compile(mulReg);
+        Pattern doPat = Pattern.compile(doReg);
+        Pattern dontPat = Pattern.compile(dontReg);
+
+        // Start with the enabled state at the beginning of the entire process
+        boolean isEnabled = true;
+        int currentStart = 0;
+
+        for (String i : input) {
+            List<List<Integer>> searchRanges = new ArrayList<>();
+            Matcher doMatch = doPat.matcher(i);
+            Matcher dontMatch = dontPat.matcher(i);
+
+            // Carry over the currentStart from the previous lines if in the enabled state
+            if (!isEnabled) {
+                // Ensure `currentStart` is valid before calling `find`
+                if (currentStart >= 0 && doMatch.find(currentStart)) {
+                    currentStart = doMatch.end();
+                    isEnabled = true;
+                } else {
+                    currentStart = -1; // Remain disabled for this line
+                }
+            }
+
+            // Determine the ranges
+            while (currentStart != -1 && currentStart < i.length() && dontMatch.find(currentStart)) {
+                // Add the region up to the `don't()`
+                searchRanges.add(List.of(currentStart, dontMatch.start()));
+                isEnabled = false;
+
+                // Look for the next `do()` to re-enable
+                if (dontMatch.end() < i.length() && doMatch.find(dontMatch.end())) {
+                    currentStart = doMatch.end();
+                    isEnabled = true;
+                } else {
+                    currentStart = -1; // No more `do()`, remain disabled
+                    break;
+                }
+            }
+
+            // If still enabled after the last `don't()`, add the final range
+            if (isEnabled && currentStart != -1 && currentStart < i.length()) {
+                searchRanges.add(List.of(currentStart, i.length()));
+            }
+
+            // Search for `mul()` in valid ranges
+            for (List<Integer> range : searchRanges) {
+                Matcher mulMatch = mulPat.matcher(i).region(range.get(0), range.get(1));
+                while (mulMatch.find()) {
+                    multiplications.add(mulMatch.group());
+                }
+            }
+
+            // If the string ends while enabled, maintain the current start for the next line
+            if (isEnabled) {
+                currentStart = 0; // Start the next string from the beginning
+            }
+        }
     }
 
     public int calculatePart1() {

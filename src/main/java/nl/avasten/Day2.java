@@ -25,6 +25,7 @@ public class Day2 {
     @Path("/part2")
     @Produces(MediaType.TEXT_PLAIN)
     public int day2part2() {
+        input = new ArrayList<>(new ArrayList<>());
         load();
         return calculatePart2();
     }
@@ -74,9 +75,41 @@ public class Day2 {
         return safeListsQty;
     }
 
+    // Between 439 and 465
+    // 457 not correct
+    // 445 not correct
     public int calculatePart2() {
-        int sum = 0;
-        return sum;
+        int safeListsQty = 0;
+        for (List<Integer> l : input) {
+            boolean safe = true;
+            boolean skippedOne = false;
+            if (l.get(1) < l.get(0)) {
+                l = l.reversed();
+            }
+
+            for (int i = 1; i < l.size(); i++) {
+                var safeStep = (l.get(i) - l.get(i - 1) >= 1 && l.get(i) - l.get(i - 1) <= 3);
+                if (!safeStep) {
+                    if (!skippedOne) {
+                        skippedOne = true;
+                        if (i + 1 < l.size()) {
+                            safe = (l.get(i + 1) - l.get(i - 1) >= 1 && l.get(i + 1) - l.get(i - 1) <= 3);
+                            i += i;
+                            System.out.println("Skipped one");
+                        }
+                        continue;
+                    }
+                    safe = false;
+                    break;
+                }
+            }
+            if (safe) {
+                safeListsQty += 1;
+            }
+            System.out.println("List: " + l + " is: " + safe);
+
+        }
+        return safeListsQty;
     }
 
 }
