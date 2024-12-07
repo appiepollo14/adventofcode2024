@@ -55,28 +55,28 @@ public class Day4 {
             for (int col = 0; col < arr.length; col++) {
                 if (arr[col] == 'X') {
                     System.out.println("'X' found at row: " + rowNumber + ", col: " + col);
-                    if (findWest(new coordinate(rowNumber, col))) {
+                    if (findWest(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findEast(new coordinate(rowNumber, col))) {
+                    if (findEast(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findNorth(new coordinate(rowNumber, col))) {
+                    if (findNorth(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findSouth(new coordinate(rowNumber, col))) {
+                    if (findSouth(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findNorthEast(new coordinate(rowNumber, col))) {
+                    if (findNorthEast(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findNorthWest(new coordinate(rowNumber, col))) {
+                    if (findNorthWest(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findSouthEast(new coordinate(rowNumber, col))) {
+                    if (findSouthEast(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
-                    if (findSouthWest(new coordinate(rowNumber, col))) {
+                    if (findSouthWest(new Coordinate(rowNumber, col))) {
                         xmasQty += 1;
                     }
                 }
@@ -85,109 +85,109 @@ public class Day4 {
         return xmasQty;
     }
 
-    public boolean findWest(coordinate xCoordinate) {
+    public boolean findWest(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row, xCoordinate.col - 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row, xCoordinate.col - 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row, xCoordinate.col - 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col - 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col - 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col - 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findEast(coordinate xCoordinate) {
+    public boolean findEast(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row, xCoordinate.col + 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row, xCoordinate.col + 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row, xCoordinate.col + 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col + 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col + 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row, xCoordinate.col + 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findNorth(coordinate xCoordinate) {
+    public boolean findNorth(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row - 1, xCoordinate.col)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row - 2, xCoordinate.col)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row - 3, xCoordinate.col)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row - 1, xCoordinate.col)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row - 2, xCoordinate.col)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row - 3, xCoordinate.col)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findSouth(coordinate xCoordinate) {
+    public boolean findSouth(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row + 1, xCoordinate.col)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row + 2, xCoordinate.col)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row + 3, xCoordinate.col)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row + 1, xCoordinate.col)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row + 2, xCoordinate.col)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row + 3, xCoordinate.col)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findSouthWest(coordinate xCoordinate) {
+    public boolean findSouthWest(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row + 1, xCoordinate.col - 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row + 2, xCoordinate.col - 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row + 3, xCoordinate.col - 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row + 1, xCoordinate.col - 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row + 2, xCoordinate.col - 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row + 3, xCoordinate.col - 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findSouthEast(coordinate xCoordinate) {
+    public boolean findSouthEast(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row + 1, xCoordinate.col + 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row + 2, xCoordinate.col + 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row + 3, xCoordinate.col + 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row + 1, xCoordinate.col + 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row + 2, xCoordinate.col + 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row + 3, xCoordinate.col + 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findNorthWest(coordinate xCoordinate) {
+    public boolean findNorthWest(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row - 1, xCoordinate.col - 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row - 2, xCoordinate.col - 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row - 3, xCoordinate.col - 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row - 1, xCoordinate.col - 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row - 2, xCoordinate.col - 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row - 3, xCoordinate.col - 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public boolean findNorthEast(coordinate xCoordinate) {
+    public boolean findNorthEast(Coordinate xCoordinate) {
         boolean found;
         try {
-            found = getCharAt(new coordinate(xCoordinate.row - 1, xCoordinate.col + 1)) == 'M'
-                    && getCharAt(new coordinate(xCoordinate.row - 2, xCoordinate.col + 2)) == 'A' &&
-                    getCharAt(new coordinate(xCoordinate.row - 3, xCoordinate.col + 3)) == 'S';
+            found = getCharAt(new Coordinate(xCoordinate.row - 1, xCoordinate.col + 1)) == 'M'
+                    && getCharAt(new Coordinate(xCoordinate.row - 2, xCoordinate.col + 2)) == 'A' &&
+                    getCharAt(new Coordinate(xCoordinate.row - 3, xCoordinate.col + 3)) == 'S';
         } catch (ArrayIndexOutOfBoundsException e) {
             return false;
         }
         return found;
     }
 
-    public Character getCharAt(coordinate coordinate) throws ArrayIndexOutOfBoundsException {
+    public Character getCharAt(Coordinate coordinate) throws ArrayIndexOutOfBoundsException {
         if (input.get(coordinate.row) != null) {
             return input.get(coordinate.row)[coordinate.col];
         }
         throw new ArrayIndexOutOfBoundsException();
     }
 
-    public record coordinate(int row, int col) {
+    public record Coordinate(int row, int col) {
     }
 }
