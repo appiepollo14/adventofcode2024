@@ -35,11 +35,21 @@ public class Day5 {
     }
 
     private boolean isOrderedCorrectly(List<Integer> l) {
+        for (List<Integer> rules : updateRules) {
+            if (l.containsAll(rules)) {
+                var firstPos = l.indexOf(rules.get(0));
+                var secondPos = l.indexOf(rules.get(1));
+                // If is before the correctly
+                if (firstPos > secondPos) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
     private int middleOfList(List<Integer> l) {
-        return l.size() / 2;
+        return l.get(l.size() / 2);
     }
 
     @GET
@@ -51,7 +61,7 @@ public class Day5 {
 
     @PostConstruct
     void load() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/day5/test-input.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/day5/puzzle-input.txt"))) {
             String line;
             boolean isBlankLineFound = false;
 
