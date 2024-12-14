@@ -19,18 +19,39 @@ public class Day6 {
 
     // Map of Locations where each key is the row number, followed by a List of locations
     Map<Integer, List<Location>> map = new HashMap<>();
-    Location startPoint;
+    Location currentLocation;
     Direction currentDirection = Direction.UP;
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public int day6() {
-        Location next = getNextLocation(currentDirection, startPoint);
-        if (!next.isObstacle) {
-
+        try {
+            while (true) {
+                Location next = getNextLocation(currentDirection, currentLocation);
+                if (!next.isObstacle) {
+                    next.setIsVisited();
+                    currentLocation = next;
+                } else {
+                    switchDirection();
+                }
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            // Handle the exception or log if needed
+            System.out.println("Out of bounds encountered, navigation stopped.");
         }
-        System.out.println(next);
         return determineVisited();
+    }
+
+    private void switchDirection() {
+        if (currentDirection.equals(Direction.UP)) {
+            currentDirection = Direction.RIGHT;
+        } else if (currentDirection.equals(Direction.RIGHT)) {
+            currentDirection = Direction.DOWN;
+        } else if (currentDirection.equals(Direction.DOWN)) {
+            currentDirection = Direction.LEFT;
+        } else if (currentDirection.equals(Direction.LEFT)) {
+            currentDirection = Direction.UP;
+        }
     }
 
     private Location getNextLocation(Direction d, Location currentLocation) throws ArrayIndexOutOfBoundsException {
@@ -76,7 +97,7 @@ public class Day6 {
 
     @PostConstruct
     void load() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/day6/test-input.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/day6/puzzle-input.txt"))) {
             String line;
             int row = 0;
 
@@ -85,9 +106,9 @@ public class Day6 {
                 List<Location> cols = new ArrayList<>();
                 for (int i = 0; i < chars.length; i++) {
                     cols.add(new Location(row, i, chars[i] == '#'));
-                    if (startPoint == null) {
+                    if (currentLocation == null) {
                         if (chars[i] == '^') {
-                            startPoint = new Location(row, i, false);
+                            currentLocation = new Location(row, i, false);
                         }
                     }
                 }
