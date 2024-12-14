@@ -18,7 +18,6 @@ public class Day5 {
     List<List<Integer>> toBeUpdatedPages = new ArrayList<>();
     List<List<Integer>> correctLists = new ArrayList<>();
     List<List<Integer>> incorrectLists = new ArrayList<>();
-    List<List<Integer>> reorderedLists = new ArrayList<>();
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
